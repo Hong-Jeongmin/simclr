@@ -44,9 +44,9 @@ def train_val(net, data_loader, train_optimizer=None):
             loss.backward()
             train_optimizer.step()
             
-            #total_num += batch_size
-            #total_loss += loss.item() * batch_size
-            #data_bar.set_description('Epoch: [{}/{}] Loss: {:.4f}'.format(epoch, epochs, total_loss / total_num))
+            total_num += batch_size
+            total_loss += loss.item() * batch_size
+            data_bar.set_description('Epoch: [{}/{}] Loss: {:.4f}'.format(epoch, epochs, total_loss / total_num))
             data_bar.set_description('Epoch: [{}/{}] Loss: {:.4f}'.format(epoch, epochs, loss.item()))
             
         
@@ -74,11 +74,11 @@ def train_val(net, data_loader, train_optimizer=None):
                 pos_sim = torch.cat([pos_sim, pos_sim], dim=0)
                 loss = (- torch.log(pos_sim / sim_matrix.sum(dim=-1))).mean()
 
-                #total_num += batch_size
-                #total_loss += loss.item() * batch_size
+                total_num += batch_size
+                total_loss += loss.item() * batch_size
                 data_bar.set_description('Epoch: [{}/{}] Loss: {:.4f}'.format(epoch, epochs, loss.item()))
 
-    return np.float(-torch.log(pos_sim).mean())
+    return total_loss/total_num
 
 
 
